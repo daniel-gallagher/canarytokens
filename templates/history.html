@@ -54,14 +54,12 @@
           <strong>Heads Up!</strong> Click the incident items for more info.
       </div>
       <div class="row content">
-          {% if API_KEY %}
           <div class="col-sm-6 incident-size">
           <h4 style="text-align: center;">Incident Map</h4>
           <div class="row">
               <div class="col-md-12"><div class="map" id="map"></div></div>
           </div>
         </div>
-        {%endif%}
         <div class="col-sm-6 incident-size">
         {% if (canarydrop['triggered_list']|length) > 0 %}
         <h4 style="text-align: center;">Incident List</h4>
