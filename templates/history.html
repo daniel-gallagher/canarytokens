@@ -73,8 +73,16 @@
           <div class="incident-item expand" id="item-{{item}}">
                 <p class="details-header">
                 <b>Date:</b> {{ item|e }}
+                                  {% if 'src_data' in canarydrop['triggered_list'][item] and
+                                  'aws_keys_event_source_ip' in canarydrop['triggered_list'][item]['src_data'] %}
+                                  <b>IP:</b> {{ canarydrop['triggered_list'][item]['src_data']['aws_keys_event_source_ip'] }}
+                                 
+                                  <b>Channel:</b> AWS API Key Token
+                                  {% else %}
                                   <b>IP:</b> {{ canarydrop['triggered_list'][item]['src_ip'] }}
+                                 
                                   <b>Channel:</b> {{ canarydrop['triggered_list'][item]['input_channel'] }}
+                                  {% endif %}
                 </p>
                 <div class="incident-item-details">
                 <!-- <script type="text/javascript">
@@ -169,12 +177,55 @@
                          </td>
                       </tr>
                       <tr class="info_row">
+                          <td>
+                           Memo
+                         </td>
+                         <td>
+                           {{ canarydrop['memo'] }}
+                         </td>
+                      </tr>
+                      <tr class="info_row">
+                        {% if field == 'src_data' and 'aws_keys_event_source_ip' in canarydrop['triggered_list'][item][field] %}
+                          <td>
+                           AWS Access Key ID
+                         </td>
+                         <td>
+                           {{ canarydrop['aws_access_key_id'] }}
+                         </td>
+                         </tr>
+                          <tr class="info_row">
+                          <td>
+                           Token Type
+                         </td>
+                         <td>
+                           AWS API Key
+                         </td>
+                         </tr>
+                        <tr class="info_row">
+                          <td>
+                           Accessed by
+                         </td>
+                         <td>
+                           {{ canarydrop['triggered_list'][item][field]['aws_keys_event_source_ip']|e }}
+                         </td>
+                        {% if 'aws_keys_event_user_agent' in canarydrop['triggered_list'][item][field]%}
+                         </tr>
+                         <tr class="info_row">
+                          <td>
+                           User-agent
+                         </td>
+                         <td>
+                           {{ canarydrop['triggered_list'][item][field]['aws_keys_event_user_agent']|e }}
+                         </td>
+                        {% endif %}
+                        {% else %}
                          <td>
                            {{field}}
                          </td>
                          <td>
                            {{ canarydrop['triggered_list'][item][field]|e }}
                          </td>
+                         {% endif %}
                       </tr>
                     </table>
                     {%endif%}
@@ -235,6 +286,7 @@
       <footer class="footer">
         <p>Brought to you by <a href="https://canary.tools/" target="_blank">Thinkst Canary</a>, our insanely easy-to-use honeypot solution that deploys in just four minutes. <strong>Know. When it matters.</strong></p>
         <p>&copy; Thinkst Applied Research 2015&ndash;2017</p>
+        <p id="mainsite" class="hidden">This <a href="http://canarytokens.org/">Canarytokens</a> installation is unaffiliated with Thinkst Applied Research.</p>
       </footer>
 
     </div> <!-- /container -->
@@ -248,6 +300,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.8/js/tooltipster.bundle.min.js" integrity="sha256-q732ZLDh1y9/RwzPjKt/GODE3lqj+078N0wwMDYQiPg=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="/resources/site.js"></script>
     <script>
     var green_icon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
     var red_icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'

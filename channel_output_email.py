@@ -11,6 +11,14 @@ from htmlmin import minify
 from httpd_site import env
 from channel import OutputChannel
 from constants import OUTPUT_CHANNEL_EMAIL
+import sendgrid
+from sendgrid.helpers.mail import *
+try:
+    # Python 3
+    import urllib.request as urllib
+except ImportError:
+    # Python 2
+    import urllib2 as urllib
 
 class EmailOutputChannel(OutputChannel):
     CHANNEL = OUTPUT_CHANNEL_EMAIL
@@ -35,7 +43,7 @@ class EmailOutputChannel(OutputChannel):
         return minify(rendered_html)
 
     def format_report_intro(self,):
-        if self.data['channel'] == 'HTTP':
+        if self.data['channel'] == 'HTTP' or self.data['channel'] == 'AWS API Key Token':
             template = ("An {Type} Canarytoken has been triggered")
         else:
             template = ("A {Type} Canarytoken has been triggered")
@@ -45,7 +53,7 @@ class EmailOutputChannel(OutputChannel):
 
         if self.data['channel'] == 'DNS':
             template += "\n\nPlease note that the source IP refers to a DNS server," \
-                        " rather than the host that triggered the token."
+                        " rather than the host that triggered the token. "
 
         return template.format(
             Type=self.data['channel'])
@@ -61,6 +69,7 @@ class EmailOutputChannel(OutputChannel):
 
         if 'src_ip' in self.data:
             vars['src_ip'] = self.data['src_ip']
+            vars['SourceIP'] = self.data['src_ip']
 
         if 'useragent' in self.data:
             vars['User-Agent'] = self.data['useragent']
@@ -93,6 +102,8 @@ class EmailOutputChannel(OutputChannel):
             self.mailgun_send(msg=msg,canarydrop=canarydrop)
         elif settings.MANDRILL_API_KEY:
             self.mandrill_send(msg=msg,canarydrop=canarydrop)
+        elif settings.SENDGRID_API_KEY:
+            self.sendgrid_send(msg=msg,canarydrop=canarydrop)
         else:
             log.err("No email settings found")
 
@@ -153,3 +164,25 @@ class EmailOutputChannel(OutputChannel):
             # Mandrill errors are thrown as exceptions
             log.err('A mandrill error occurred: %s - %s' % (e.__class__, e))
             # A mandrill error occurred: <class 'mandrill.UnknownSubaccountError'> - No subaccount exists with the id 'customer-123'....
+
+    def sendgrid_send(self, msg=None, canarydrop=None):
+        try:
+            sg = sendgrid.SendGridAPIClient(apikey=settings.SENDGRID_API_KEY)
+            from_email = Email(msg['from_address'], msg['from_display'])
+            subject = msg['subject']
+            to_email = Email(canarydrop['alert_email_recipient'])
+            text = msg['body']
+            content = Content("text/html", self.format_report_html())
+            mail = Mail(from_email, subject, to_email, content)
+
+            if settings.DEBUG:
+                pprint.pprint(mail)
+            else:
+                response = sg.client.mail.send.post(request_body=mail.get())
+
+                log.msg('Sent alert to {recipient} for token {token}'\
+                        .format(recipient=canarydrop['alert_email_recipient'],
+                                token=canarydrop.canarytoken.value()))
+
+        except urllib.HTTPError as e:
+            log.err('A sendgrid error occurred: %s - %s' % (e.__class__, e))

@@ -248,7 +248,7 @@
           border-radius: 5px 5px 0 0;
           background: #4cbeff;
           box-shadow: none;
-          border-bottom: none;
+          border-bottom: 2px solid #eceeef;
           color: white;
       }
 
@@ -400,6 +400,22 @@
         text-align: left;
       }
 
+      .error-field {
+        display: none;
+        color: red;
+        border-bottom: 1px solid red;
+        border-radius: 6px;
+        margin-bottom: 24px;
+      }
+      #endpoints_errors {
+        border: 1px solid red;
+        margin: 24px 0px;
+        padding: 0px 5px;
+      }
+      #endpoints_errors pre {
+        color: #eceeef;
+        background: firebrick;
+      }
       .map{
         position: relative;
         margin-bottom: 10px;
@@ -510,6 +526,9 @@
       a.icon-svn:before {
         background-image: url("/resources/svn.png");
       }
+      a.icon-aws:before {
+        background-image: url("/resources/aws.png");
+      }
 
       @media (max-width: 768px) {
         input.form-control:-moz-placeholder, textarea.form-control:-moz-placeholder {
@@ -581,4 +600,9 @@
           font-size: 0.9rem;
         }
 
+      }
+
+      #mainsite {
+        font-size: smaller;
+        padding-top: 1.5rem;
       }
