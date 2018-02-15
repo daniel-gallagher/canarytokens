@@ -48,6 +48,7 @@
     <meta property="og:image:height" content="52">
     <meta name="keywords" content="Canary token,Canarytokens,Canary token,Canary tokens,Honeytoken,Honeytokens,Web bug,DNS token,URL token,Thinkst,Thinkst Applied Research">
     <link rel="icon" href="../../favicon.ico">
+    <link href="/resources/perfect-scrollbar.css" rel="stylesheet">
 
     <title>Canarytokens</title>
 
@@ -58,7 +59,13 @@
     <link href="https://v4-alpha.getbootstrap.com/examples/narrow-jumbotron/narrow-jumbotron.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.8/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.8/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css" integrity="sha256-ZiBTbkzExWV/DU4+02ZMqXaNu7o0XfNmxTa0+gRbdO0=" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/resources/styles.min.css">
+    <link rel="stylesheet" type="text/css" href="/resources/styles.min.css?ver=1">
+    <style>
+    .ps__rail-x,
+    .ps__rail-y {
+      opacity: 0.6;
+    }
+    </style>
   </head>
 
   <body>
@@ -102,8 +109,10 @@
                     <li data-type="sql_server"     data-memo-placeholder="SELET SQL Server token on SQL01/CreditCards"><a href="#" class="icon icon-sqlserver"><span class="title">SQL Server</span><div class="explanation">Get alerted when MS SQL Server databases are accessed</div></a></li>
                     <li data-type="qr_code"        data-memo-placeholder="QR code underneath Simon's phone batter"><a href="#" class="icon icon-qrcode"><span class="title">QR Code</span><div class="explanation">Generate a QR code for physical tokens</div></a></li>
                     <li data-type="svn"            data-memo-placeholder="SVN token on REPO01/ourmainrepo"><a href="#" class="icon icon-svn"><span class="title">SVN</span><div class="explanation">Alert when someone checks out an SVN repository</div></a></li>
-                    <li data-type="aws_keys"        data-memo-placeholder="like AWS keys placed on Jim's laptop"><a href="#" class="icon icon-aws"><span class="title">AWS keys</span><div class="explanation">Alert when AWS key is used</div></a></li>
-                	</ul>
+                    <li data-type="aws_keys"       data-memo-placeholder="like AWS keys placed on Jim's laptop"><a href="#" class="icon icon-aws"><span class="title">AWS keys</span><div class="explanation">Alert when AWS key is used</div></a></li>
+                    <li data-type="fast_redirect"  data-memo-placeholder="URL within Dropbox"><a href="#" class="icon icon-redirect"><span class="title">Fast Redirect</span><div class="explanation">Alert when a URL is visited, User is redirected</div></a></li>
+                    <li data-type="slow_redirect"  data-memo-placeholder="URL within Dropbox"><a href="#" class="icon icon-redirect"><span class="title">Slow Redirect</span><div class="explanation">Alert when a URL is visited, User is redirected (Moar info is grabbed!)</div></a></li>
+                  </ul>
                 </div>
               </div>
               <div class="col-md-1">
@@ -146,6 +155,9 @@
                   fires
                   <input class="form-control" type="text" tabindex=6 name="sql_server_function_name" placeholder="Name of SQL Server function" value="FUNCTION1">
                   <input class="form-control" type="text" tabindex=7 name="sql_server_trigger_name" placeholder="Name of SQL Server trigger" value="TRIGGER1">
+                </div>
+                <div class="field-optional field-fast_redirect field-slow_redirect hidden">
+                  <input class="form-control" type="text" tabindex=3 name="redirect_url" placeholder="https://www.redirect.com">
                 </div>
               </div>
               <div class="col-md-1">
@@ -190,6 +202,46 @@
                   <p>Ideas for use:
                     <ul>
                       <li>In an email with a juicy subject line.</li>
+                      <li>Embedded in documents.</li>
+                      <li>Inserted into canary webpages that are only found through brute-force.</li>
+                      <li>This URL is just an example. Apart from the hostname and the actual token (the random string), you can change all other parts of the URL.</li>
+                    </ul>
+                  </p>
+                </div>
+              </div>
+              <div class="result fast_redirect">
+                <h3>Your Fast Redirect token is active!</h3>
+                <div class="artifacts">
+                  <p>Copy this URL to your clipboard and use as you wish:</p>
+                  <div class="form-control">
+                    {{ inputcopy('result_fast_redirect', refresh=True) }}
+                  </div>
+                </div>
+                <div class="advice">
+                  <p>The token is similar to the Web token, however, when the link is loaded the view will be immediately redirected to the specified redirect URL.</p>
+                  <p>Ideas for use:
+                    <ul>
+                      <li>Replace links with these to capture user information before user is redirected to where they want to go.</li>
+                      <li>Embedded in documents.</li>
+                      <li>Inserted into canary webpages that are only found through brute-force.</li>
+                      <li>This URL is just an example. Apart from the hostname and the actual token (the random string), you can change all other parts of the URL.</li>
+                    </ul>
+                  </p>
+                </div>
+              </div>
+              <div class="result slow_redirect">
+                <h3>Your Slow Redirect token is active!</h3>
+                <div class="artifacts">
+                  <p>Copy this URL to your clipboard and use as you wish:</p>
+                  <div class="form-control">
+                    {{ inputcopy('result_slow_redirect', refresh=True) }}
+                  </div>
+                </div>
+                <div class="advice">
+                  <p>The token is similar to the Fast Redirect token, however, when the link is loaded the user's browser / browser plugin information is captured.</p>
+                  <p>Ideas for use:
+                    <ul>
+                      <li>Replace links with these to capture user information before user is redirected to where they want to go.</li>
                       <li>Embedded in documents.</li>
                       <li>Inserted into canary webpages that are only found through brute-force.</li>
                       <li>This URL is just an example. Apart from the hostname and the actual token (the random string), you can change all other parts of the URL.</li>
@@ -530,7 +582,7 @@
 
       <footer class="footer">
         <p>Brought to you by <a href="https://canary.tools/" target="_blank">Thinkst Canary</a>, our insanely easy-to-use honeypot solution that deploys in just four minutes. <strong>Know. When it matters.</strong></p>
-        <p>&copy; <a href="https://thinkst.com" target="_blank">Thinkst Applied Research</a> 2015&ndash;2017</p>
+        <p>&copy; <a href="https://thinkst.com" target="_blank">Thinkst Applied Research</a> 2015&ndash;2018</p>
         <p id="mainsite" class="hidden">This <a href="http://canarytokens.org/">Canarytokens</a> installation is unaffiliated with Thinkst Applied Research.</p>
       </footer>
 
@@ -545,6 +597,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.0/clipboard.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.tooltipster/4.1.8/js/tooltipster.bundle.min.js" integrity="sha256-q732ZLDh1y9/RwzPjKt/GODE3lqj+078N0wwMDYQiPg=" crossorigin="anonymous"></script>
     <script src="/resources/site.js"></script>
+    <script src="/resources/perfect-scrollbar.min.js"></script>
     <script>
       Array.prototype.random = function () {
         return this[Math.floor((Math.random()*this.length))];
@@ -648,6 +701,32 @@
         return cloned_website.removeClass('error-outline').addClass('success-outline');
       }
 
+      var checkFastRedirect = function() {
+        var expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+        var regex = new RegExp(expression);
+        redirect_url = $('input[name=redirect_url]');
+        if (! redirect_url.parents('.field-fast_redirect').hasClass('hidden')) {
+          //only perform checks if field is visible. could be multiple checks
+          if (redirect_url.val().length == 0 || !redirect_url.val().match(regex)) {
+            return redirect_url.addClass('error-outline').removeClass('success-outline');
+          }
+        }
+        return redirect_url.removeClass('error-outline').addClass('success-outline');
+      }
+
+      var checkSlowRedirect = function() {
+        var expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+        var regex = new RegExp(expression);
+        redirect_url = $('input[name=redirect_url]');
+        if (! redirect_url.parents('.field-slow_redirect').hasClass('hidden')) {
+          //only perform checks if field is visible. could be multiple checks
+          if (redirect_url.val().length == 0 || !redirect_url.val().match(regex)) {
+            return redirect_url.addClass('error-outline').removeClass('success-outline');
+          }
+        }
+        return redirect_url.removeClass('error-outline').addClass('success-outline');
+      }
+
       var _checkSQLServerSelectedAction = function() {
         sql_server_selected_action = $('#selected_sql_action');
 
@@ -722,6 +801,8 @@
         checkSignedExe();
         checkClonedWebsite();
         checkSQLServer();
+        checkFastRedirect();
+        checkSlowRedirect();
 
         //invert UI elements, depending on whether there are errors or not
         showSave();
@@ -806,6 +887,10 @@
       			$('.wrapper-dropdown').removeClass('active');
       	});
 
+        $('.wrapper-dropdown').click(function() {
+          setTimeout(function(){new PerfectScrollbar('#dropdown')}, 250);
+        });
+
         $('.tooltip').tooltipster({
           theme: 'tooltipster-borderless',
           trigger: 'custom',
@@ -837,6 +922,28 @@
                    data['Token'],
                    data['Url_components'][2].random()].join('/');
             $('#result_web').val(url);
+          });
+        };
+
+        var _handleFastRedirectResponse = function(data) {
+          $('#result_fast_redirect').val(data['Url']);
+          $('#result_fast_redirect').siblings('.refresh').on('click', function() {
+            url = [data['Url_components'][0].random(),
+                   data['Url_components'][1].random(),
+                   data['Token'],
+                   data['Url_components'][2].random()].join('/');
+            $('#result_fast_redirect').val(url);
+          });
+        };
+
+        var _handleSlowRedirectResponse = function(data) {
+          $('#result_slow_redirect').val(data['Url']);
+          $('#result_slow_redirect').siblings('.refresh').on('click', function() {
+            url = [data['Url_components'][0].random(),
+                   data['Url_components'][1].random(),
+                   data['Token'],
+                   data['Url_components'][2].random()].join('/');
+            $('#result_slow_redirect').val(url);
           });
         };
 
@@ -929,6 +1036,8 @@
                                   'smtp': _handleSMTPResponse,
                                   'sql_server': _handleSQLServerResponse,
                                   'signed_exe': _handlerSignedExeResponse,
+                                  'fast_redirect': _handleFastRedirectResponse,
+                                  'slow_redirect': _handleSlowRedirectResponse,
                                   'default':   _handleDefaultResponse
                                  };
 
